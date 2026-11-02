@@ -25,25 +25,28 @@ flowchart TD
     W --> W0[L0 精确匹配]
     W0 -->|未命中| W1[L1 模型树导航<br/>超时即放弃]
     W1 -->|失败| W2[L2 澄清卡片]
-    Q --> R[关键词检索 + 来源名]
+    Q --> R0[轻型 RAG<br/>BM25 / 关键词召回]
+    R0 -->|置信度足够| C
+    R0 -->|未命中 / 低置信| R1[重型 RAG<br/>向量召回 + 重排 + 多篇合并]
+    R1 --> C
 
     L1 --> C[合成 compose]
     L2 --> C
     W0 --> C
     W1 --> C
     W2 --> C
-    R --> C
+    R1 --> C
 
     C -->|无需专家| G[输出守卫 guard<br/>确定性 / 失败即拒答]
     G --> A([即时回复])
 
     C -->|草稿| H[草稿暂存 + 截止时间]
     B --> S[外部专家 Agent<br/>慢，由其他团队维护]
-    O -->|立刻返回受理回执| A
+    O -->|立刻返回受理回执| A0([受理回执])
     S --> F[融合改写 LLM]
     H --> F
-    F --> G2[输出守卫 第二遍]
     H -->|专家超时| G2
+    F --> G2[输出守卫 第二遍]
     G2 --> D([异步投递<br/>fused / draft_timeout / late_update])
 
     classDef model fill:#eef2ff,stroke:#4f46e5,stroke-width:1.5px,color:#1e1b4b;
@@ -55,11 +58,11 @@ flowchart TD
     classDef ext   fill:#faf5ff,stroke:#a855f7,stroke-width:1.5px,stroke-dasharray:5 3,color:#581c87;
     classDef io    fill:#f8fafc,stroke:#64748b,stroke-width:1.2px,color:#1e293b;
 
-    class U,A,D io;
+    class U,A,A0,D io;
     class P,K model;
     class O,C core;
     class L,W,Q arm;
-    class L1,L2,W0,W1,W2,R level;
+    class L1,L2,W0,W1,W2,R0,R1 level;
     class G,G2 guard;
     class H draft;
     class B,S,F ext;
@@ -73,7 +76,7 @@ flowchart TD
 | lookup L1 | 类目、渠道、目标命中就直接查表 | 否 | 进 L2 |
 | lookup L2 | 模型补全未解析的维度，最多 2 轮 | 是 | 列出可选类目 |
 | packs L0/L1/L2 | 精确匹配、模型导航、澄清 | L1 用 | 澄清卡片 |
-| qa | 关键词检索，返回段落与来源 | 否 | 返回“未找到” |
+| qa | 轻型 RAG（BM25 / 关键词）优先；低置信升级重型 RAG（向量召回 + 重排 + 多篇合并） | 轻型否 / 重型是 | 返回“未找到” |
 | bridge | 异步调用外部专家，立即返回回执 | 否 | 草稿到期后发出 |
 | delivery | 暂存草稿、融合、去重、超时兜底 | 融合用 | 发草稿 |
 | guard | 删除敏感列、名单表、敏感句，再校验 | 否 | 返回拒答文案 |
