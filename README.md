@@ -25,7 +25,7 @@ orch = Orchestrator(llm=OpenAICompatLLM())   # reads LLM_BASE_URL, LLM_API_KEY, 
 
 | Question | Plan | Path |
 |---|---|---|
-| return policy | qa | light RAG (BM25/keyword) first; heavy RAG (vector + rerank) on low confidence; answer cites its source file |
+| return policy | qa | light RAG (vector + BM25 + keyword, RRF) first; heavy RAG (rewrite + rerank + multi-hop) on low confidence; answer cites its source file |
 | Apparel CPM/CTR | lookup | L1 deterministic table lookup |
 | "Electronic goods" CPM | lookup | L1 misses, L2 bounded tool loop resolves the category |
 | hiking boots terms | pack | L0 exact match on the pack tree |
@@ -41,7 +41,7 @@ src/tiered_agent/
   orchestrator.py   plan -> arms -> compose -> guard; hands external work to the bridge
   arms/lookup.py    L1 deterministic, L2 bounded tool loop with a number guard
   arms/packs.py     L0 exact, L1 model tree navigation with timeout, L2 clarification card
-  arms/qa.py        light RAG (BM25/keyword) with source names; heavy RAG is design-only
+  arms/qa.py        keyword overlap only; light RAG (vector/BM25/keyword + RRF) and heavy RAG are design-only
   async_bridge.py   slow specialist agent, held draft, fusion, timeout flush, idempotent send
   guard.py          deterministic fail-closed output guard
   llm.py            LLM protocol, OpenAI-compatible client, offline MockLLM
