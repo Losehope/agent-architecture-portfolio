@@ -1,0 +1,10 @@
+{
+  "Footwear": {
+    "Running": ["running shoes", "marathon trainers", "lightweight runners", "trail running shoes"],
+    "Hiking": ["hiking boots", "waterproof hiking shoes", "mountain boots"]
+  },
+  "Kitchen": {
+    "Cookware": ["non stick pan", "cast iron skillet", "stainless steel pot"],
+    "Appliances": ["air fryer", "espresso machine", "electric kettle"]
+  }
+}

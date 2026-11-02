@@ -1,0 +1,10 @@
+{
+  "sensitive_columns": ["revenue share", "spend share", "market share"],
+  "roster_columns": ["advertiser", "client", "account", "customer"],
+  "sentence_patterns": [
+    "(revenue|spend|market)\\s+share[^.;\\n]{0,40}?\\d",
+    "\\bcr\\s?\\d+\\b",
+    "top\\s?\\d+\\s+combined"
+  ],
+  "refusal": "This request involves data that cannot be disclosed."
+}

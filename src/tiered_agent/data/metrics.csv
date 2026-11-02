@@ -1,0 +1,8 @@
+channel,category,goal,cpm,ctr,cvr,spend_share
+feed,Apparel,purchase,12.4,1.8,2.1,0.30
+feed,Apparel,signup,9.8,2.2,3.5,0.12
+feed,Electronics,purchase,18.9,1.2,1.4,0.25
+feed,Home,purchase,11.1,1.6,1.9,0.10
+search,Apparel,purchase,21.5,3.1,2.8,0.18
+search,Electronics,purchase,30.2,2.7,1.9,0.15
+search,Home,purchase,16.0,2.4,2.2,0.10
