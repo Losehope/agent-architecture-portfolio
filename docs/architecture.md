@@ -15,8 +15,8 @@ flowchart TD
     P --> O[编排 orchestrator]
     K --> O
 
-    O --> L[取数臂 lookup]
-    O --> W[词包臂 packs]
+    O --> L[检索臂 lookup]
+    O --> W[术语臂 packs]
     O --> Q[知识问答臂 qa]
     O -.需要专家.-> B[异步桥 bridge]
 
