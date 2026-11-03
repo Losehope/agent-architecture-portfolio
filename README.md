@@ -4,6 +4,22 @@ A small, runnable reference for a customer-facing Q&A agent that mixes cheap det
 bounded model loops and a slow external specialist agent. It is a clean-room project: all data is
 synthetic, there is no company code, and it needs no network or API key by default.
 
+## Product view
+
+One entry point serves four kinds of questions. They differ in answer shape, determinism and latency,
+so the product routes by question type instead of running one generic RAG chain:
+
+| Question | Path | If it fails |
+|---|---|---|
+| benchmark number | deterministic table → bounded tool loop | ask the user to pick a category |
+| terminology list | exact match → model tree navigation → clarification card | clarification card |
+| policy / rule | light RAG (vector + BM25 + keyword, RRF) → heavy RAG (rewrite + rerank + multi-hop) | explicit "not found" |
+| strategy advice | immediate receipt + held draft → specialist reply fused later | send the draft at the deadline |
+
+The reasoning behind each choice — including what was rejected and what it cost — is in
+[docs/product-decisions.md](docs/product-decisions.md); the full flows and states are in
+[docs/product-design.md](docs/product-design.md).
+
 ## Run
 
 ```bash
@@ -51,6 +67,8 @@ tests/test_all.py   23 tests: guard, planner, arms, delivery, end to end
 
 ## Docs
 
+- [docs/product.md](docs/product.md): product brief — problem, users, capabilities, metrics
+- [docs/product-design.md](docs/product-design.md): product design — user tasks, paths, flows, states, reply structure
+- [docs/product-decisions.md](docs/product-decisions.md): 9 product decisions, each with alternatives and costs
 - [docs/architecture.md](docs/architecture.md): diagram, components, request flows
-- [docs/design.md](docs/design.md): design decisions and trade-offs
-- [docs/product.md](docs/product.md): product document
+- [docs/design.md](docs/design.md): engineering decisions and trade-offs
