@@ -18,7 +18,9 @@ so the product routes by question type instead of running one generic RAG chain:
 
 The reasoning behind each choice — including what was rejected and what it cost — is in
 [docs/product-decisions.md](docs/product-decisions.md); the full flows and states are in
-[docs/product-design.md](docs/product-design.md).
+[docs/product-design.md](docs/product-design.md). The scenarios and failure modes in both docs are
+drawn from about 2,000 anonymized real questions: no customer names, account IDs, group IDs, links
+or internal product names are included.
 
 ## Run
 
